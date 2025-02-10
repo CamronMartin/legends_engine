@@ -1,25 +1,26 @@
 #ifndef RENDERSYSTEM_H
 #define RENDERSYSTEM_H
 
+#include <SDL2/SDL.h>
+
+#include <algorithm>
+#include <string>
+
 #include "../AssetStore/AssetStore.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/TransformComponent.h"
 #include "../ECS/ECS.h"
 #include "SDL2/SDL_rect.h"
 #include "SDL2/SDL_render.h"
-#include <SDL2/SDL.h>
-#include <algorithm>
-#include <string>
 
 class RenderSystem : public System {
-public:
+ public:
   RenderSystem() {
     RequireComponent<TransformComponent>();
     RequireComponent<SpriteComponent>();
   }
 
-  void Update(SDL_Renderer *renderer, std::unique_ptr<AssetStore> &assetStore,
-              SDL_Rect &camera) {
+  void Update(SDL_Renderer *renderer, std::unique_ptr<AssetStore> &assetStore, SDL_Rect &camera) {
     // Create a vector with both sprite and transform cponent of all entities
     struct RenderableEntity {
       TransformComponent transformComponent;
@@ -29,8 +30,7 @@ public:
     for (auto entity : GetSystemEntity()) {
       RenderableEntity renderableEntity;
       renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
-      renderableEntity.transformComponent =
-          entity.GetComponent<TransformComponent>();
+      renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
       renderableEntities.emplace_back(renderableEntity);
     }
 
@@ -49,16 +49,13 @@ public:
       SDL_Rect srcRect = sprite.srcRect;
 
       // Set the destination rectangle
-      SDL_Rect dstRect = {static_cast<int>(transform.position.x -
-                                           (sprite.isFixed ? 0 : camera.x)),
-                          static_cast<int>(transform.position.y -
-                                           (sprite.isFixed ? 0 : camera.y)),
+      SDL_Rect dstRect = {static_cast<int>(transform.position.x - (sprite.isFixed ? 0 : camera.x)),
+                          static_cast<int>(transform.position.y - (sprite.isFixed ? 0 : camera.y)),
                           static_cast<int>(sprite.width * transform.scale.x),
                           static_cast<int>(sprite.height * transform.scale.y)};
 
-      SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId),
-                       &srcRect, &dstRect, transform.rotation, NULL,
-                       SDL_FLIP_NONE);
+      SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &dstRect, transform.rotation, NULL,
+                       sprite.flip);
       // Draw the PNG texture
     }
   }
