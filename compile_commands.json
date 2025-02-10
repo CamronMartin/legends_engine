@@ -1,0 +1,102 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-Wall",
+      "-Wfatal-errors",
+      "-I./libs/",
+      "-I/opt/homebrew/Cellar/sdl2/2.30.7/include",
+      "-I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include",
+      "-I/opt/homebrew/Cellar/sdl2_mixer/2.8.0/include",
+      "-I/opt/homebrew/Cellar/sdl2_ttf/2.22.0/include",
+      "-I./src/Components/",
+      "-I",
+      "{CPLUS_INCLUDE_PATH",
+      "-I",
+      "}/opt/homebrew/Cellar/sdl2/2.30.5/include",
+      "-o",
+      "gameengine",
+      "./src/Main.cpp"
+    ],
+    "directory": "/Users/brycemartin/2dgameengine",
+    "file": "/Users/brycemartin/2dgameengine/src/Main.cpp",
+    "output": "/Users/brycemartin/2dgameengine/gameengine"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-Wall",
+      "-Wfatal-errors",
+      "-I./libs/",
+      "-I/opt/homebrew/Cellar/sdl2/2.30.7/include",
+      "-I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include",
+      "-I/opt/homebrew/Cellar/sdl2_mixer/2.8.0/include",
+      "-I/opt/homebrew/Cellar/sdl2_ttf/2.22.0/include",
+      "-I./src/Components/",
+      "-I",
+      "{CPLUS_INCLUDE_PATH",
+      "-I",
+      "}/opt/homebrew/Cellar/sdl2/2.30.5/include",
+      "-o",
+      "gameengine",
+      "./src/Game/Game.cpp"
+    ],
+    "directory": "/Users/brycemartin/2dgameengine",
+    "file": "/Users/brycemartin/2dgameengine/src/Game/Game.cpp",
+    "output": "/Users/brycemartin/2dgameengine/gameengine"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-Wall",
+      "-Wfatal-errors",
+      "-I./libs/",
+      "-I/opt/homebrew/Cellar/sdl2/2.30.7/include",
+      "-I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include",
+      "-I/opt/homebrew/Cellar/sdl2_mixer/2.8.0/include",
+      "-I/opt/homebrew/Cellar/sdl2_ttf/2.22.0/include",
+      "-I./src/Components/",
+      "-I",
+      "{CPLUS_INCLUDE_PATH",
+      "-I",
+      "}/opt/homebrew/Cellar/sdl2/2.30.5/include",
+      "-o",
+      "gameengine",
+      "./src/Logger/Logger.cpp"
+    ],
+    "directory": "/Users/brycemartin/2dgameengine",
+    "file": "/Users/brycemartin/2dgameengine/src/Logger/Logger.cpp",
+    "output": "/Users/brycemartin/2dgameengine/gameengine"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-Wall",
+      "-Wfatal-errors",
+      "-I./libs/",
+      "-I/opt/homebrew/Cellar/sdl2/2.30.7/include",
+      "-I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include",
+      "-I/opt/homebrew/Cellar/sdl2_mixer/2.8.0/include",
+      "-I/opt/homebrew/Cellar/sdl2_ttf/2.22.0/include",
+      "-I./src/Components/",
+      "-I",
+      "{CPLUS_INCLUDE_PATH",
+      "-I",
+      "}/opt/homebrew/Cellar/sdl2/2.30.5/include",
+      "-o",
+      "gameengine",
+      "./src/ECS/ECS.cpp"
+    ],
+    "directory": "/Users/brycemartin/2dgameengine",
+    "file": "/Users/brycemartin/2dgameengine/src/ECS/ECS.cpp",
+    "output": "/Users/brycemartin/2dgameengine/gameengine"
+  }
+]
