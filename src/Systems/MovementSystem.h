@@ -1,8 +1,6 @@
 #ifndef MOVEMENTSYSTEM_H
 #define MOVEMENTSYSTEM_H
 
-#include <src/Game/Game.h>
-
 #include <string>
 
 #include "../Components/RigidBodyComponent.h"
@@ -11,6 +9,7 @@
 #include "../ECS/ECS.h"
 #include "../EventBus/EventBus.h"
 #include "../Events/CollisionEvent.h"
+#include "../Game/Game.h"
 #include "SDL2/SDL_render.h"
 
 class MovementSystem : public System {

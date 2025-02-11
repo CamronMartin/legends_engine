@@ -31,14 +31,24 @@ class RenderSystem : public System {
       RenderableEntity renderableEntity;
       renderableEntity.spriteComponent = entity.GetComponent<SpriteComponent>();
       renderableEntity.transformComponent = entity.GetComponent<TransformComponent>();
+
+      // Bypass rendering entities if they are outside the camera view
+      bool isEntityOutsideCameraView = {
+          renderableEntity.transformComponent.position.x + (renderableEntity.transformComponent.scale.x * renderableEntity.spriteComponent.width) < camera.x ||
+          renderableEntity.transformComponent.position.x > camera.x + camera.w ||
+          renderableEntity.transformComponent.position.y + (renderableEntity.transformComponent.scale.y * renderableEntity.spriteComponent.height) < camera.y ||
+          renderableEntity.transformComponent.position.y > camera.y + camera.h};
+
+      // Cull sprites that are outside the camera view
+      if (isEntityOutsideCameraView && !renderableEntity.spriteComponent.isFixed) {
+        continue;
+      }
       renderableEntities.emplace_back(renderableEntity);
     }
 
     // Sort the vector by the z-index value
     std::sort(renderableEntities.begin(), renderableEntities.end(),
-              [](const RenderableEntity &a, const RenderableEntity &b) {
-                return a.spriteComponent.zIndex < b.spriteComponent.zIndex;
-              });
+              [](const RenderableEntity &a, const RenderableEntity &b) { return a.spriteComponent.zIndex < b.spriteComponent.zIndex; });
 
     // Loop all entities that the system is interested in
     for (auto entity : renderableEntities) {
@@ -49,13 +59,10 @@ class RenderSystem : public System {
       SDL_Rect srcRect = sprite.srcRect;
 
       // Set the destination rectangle
-      SDL_Rect dstRect = {static_cast<int>(transform.position.x - (sprite.isFixed ? 0 : camera.x)),
-                          static_cast<int>(transform.position.y - (sprite.isFixed ? 0 : camera.y)),
-                          static_cast<int>(sprite.width * transform.scale.x),
-                          static_cast<int>(sprite.height * transform.scale.y)};
+      SDL_Rect dstRect = {static_cast<int>(transform.position.x - (sprite.isFixed ? 0 : camera.x)), static_cast<int>(transform.position.y - (sprite.isFixed ? 0 : camera.y)),
+                          static_cast<int>(sprite.width * transform.scale.x), static_cast<int>(sprite.height * transform.scale.y)};
 
-      SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &dstRect, transform.rotation, NULL,
-                       sprite.flip);
+      SDL_RenderCopyEx(renderer, assetStore->GetTexture(sprite.assetId), &srcRect, &dstRect, transform.rotation, NULL, sprite.flip);
       // Draw the PNG texture
     }
   }

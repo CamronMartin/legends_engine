@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include <memory>
+#include <sol/sol.hpp>
 
 #include "../AssetStore/AssetStore.h"
 #include "../ECS/ECS.h"
@@ -20,7 +21,7 @@ class Game {
   SDL_Window *window;
   SDL_Renderer *renderer;
   SDL_Rect camera;
-
+  sol::state lua;
   std::unique_ptr<Registry> registry;
   std::unique_ptr<AssetStore> assetStore;
   std::unique_ptr<EventBus> eventBus;
@@ -31,7 +32,6 @@ class Game {
   void Initialize();
   void Run();
   void Setup();
-  void LoadLevel(int level);
   void ProcessInput();
   void Update();
   void Render();

@@ -1,5 +1,7 @@
-#include "./Game/Game.h"
 #include <iostream>
+#include <sol/sol.hpp>
+
+#include "./Game/Game.h"
 
 int main(int argc, char *argv[]) {
   Game game;

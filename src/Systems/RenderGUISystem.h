@@ -30,12 +30,9 @@ class RenderGUISystem : public System {
       static int scaleY = 1;
       static int velX = 0;
       static int velY = 0;
-      static int boxColliderW = 0;
-      static int boxColliderH = 0;
       static float projSpeed;
       static int projRepeat;
       static int projDuration;
-      static int projDamage;
       static float rotation = 0.0;
       static float projAngle = 0.0;
       static int health;
