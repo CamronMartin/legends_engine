@@ -1,6 +1,8 @@
 #ifndef MOVEMENTSYSTEM_H
 #define MOVEMENTSYSTEM_H
 
+#include <src/Game/Game.h>
+
 #include <string>
 
 #include "../Components/RigidBodyComponent.h"
@@ -58,6 +60,18 @@ class MovementSystem : public System {
       transform.position.x += rigidbody.velocity.x * deltaTime;
       transform.position.y += rigidbody.velocity.y * deltaTime;
 
+      if (entity.HasTag("player")) {
+        int left = 10;
+        int top = 10;
+        int right = 50;
+        int bottom = 50;
+        transform.position.x = transform.position.x < left ? left : transform.position.x;
+        transform.position.x =
+            transform.position.x > Game::mapWidth - right ? Game::mapWidth - right : transform.position.x;
+        transform.position.y = transform.position.y < top ? top : transform.position.y;
+        transform.position.y =
+            transform.position.y > Game::mapHeight - bottom ? Game::mapHeight - bottom : transform.position.y;
+      }
       bool isEntityOutsideMap = (transform.position.x < 0 || transform.position.x > Game::mapWidth ||
                                  transform.position.y < 0 || transform.position.y > Game::mapHeight);
 
