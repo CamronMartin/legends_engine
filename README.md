@@ -1,5 +1,5 @@
 # legends_engine
-A game engine built in c++
+This is a lightweight and performant 2D game engine written in C++ using SDL2. It provides essential tools and features to help build, manage, and render 2D games with ease.
 
 Features:
 
