@@ -12,6 +12,7 @@
 #include "../Components/KeyboardControlComponent.h"
 #include "../Components/ProjectileEmitterComponent.h"
 #include "../Components/RigidBodyComponent.h"
+#include "../Components/ScriptComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/TextLabelComponent.h"
 #include "../Components/TransformComponent.h"
@@ -185,6 +186,13 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
             glm::vec2(entity["components"]["keyboard_controller"]["right_velocity"]["x"], entity["components"]["keyboard_controller"]["right_velocity"]["y"]),
             glm::vec2(entity["components"]["keyboard_controller"]["down_velocity"]["x"], entity["components"]["keyboard_controller"]["down_velocity"]["y"]),
             glm::vec2(entity["components"]["keyboard_controller"]["left_velocity"]["x"], entity["components"]["keyboard_controller"]["left_velocity"]["y"]));
+      }
+
+      // Script
+      sol::optional<sol::table> script = entity["components"]["on_update_script"];
+      if (script != sol::nullopt) {
+        sol::function func = entity["components"]["on_update_script"][0];
+        newEntity.AddComponent<ScriptComponent>(func);
       }
     }
     i++;
