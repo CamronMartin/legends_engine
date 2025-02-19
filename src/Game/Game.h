@@ -16,7 +16,6 @@ const int MILLISECS_PER_FRAME = 1000 / FPS;
 
 class Game {
  private:
-  Mix_Music *music;
   bool isRunning;
   bool isDebug = false;
   int millisecsPreviousFrame = 0;

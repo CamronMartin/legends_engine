@@ -5,7 +5,8 @@ INCLUDE_PATH =  -I"./libs/" \
 				-I/opt/homebrew/Cellar/sdl2_image/2.8.2_2/include \
 				-I/opt/homebrew/Cellar/sdl2_mixer/2.8.0/include \
 				-I/opt/homebrew/Cellar/sdl2_ttf/2.22.0/include \
-				-I"./src/Components/"
+				-I"./src/Components/" \
+				-I"/opt/homebrew/Cellar/lua/5.4.7/include"
 LIB_PATH = -L/opt/homebrew/Cellar/sdl2/2.30.7/lib \
 		   -L/opt/homebrew/Cellar/sdl2_image/2.8.2_2/lib \
 		   -L/opt/homebrew/Cellar/sdl2_mixer/2.8.0/lib \

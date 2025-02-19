@@ -29,9 +29,6 @@ class KeyboardControlSystem : public System {
       auto &sprite = entity.GetComponent<SpriteComponent>();
       auto &rigidbody = entity.GetComponent<RigidBodyComponent>();
 
-      // TODO: Add a SDL_KEYUP and SDL_KEYDOWN switch clause to
-      // be able to make units move diagonally
-
       switch (event.symbol) {
         case SDLK_UP:
           rigidbody.velocity = keyboardcontrol.upVelocity;
