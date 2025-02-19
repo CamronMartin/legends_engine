@@ -16,6 +16,7 @@
 #include "../Events/KeyPressedEvent.h"
 #include "../Logger/Logger.h"
 #include "../Systems/AnimationSystem.h"
+#include "../Systems/AudioSystem.h"
 #include "../Systems/CameraMovementSystem.h"
 #include "../Systems/CollisionSystem.h"
 #include "../Systems/DamageSystem.h"
@@ -30,6 +31,7 @@
 #include "../Systems/RenderTextSystem.h"
 #include "../Systems/ScriptSystem.h"
 #include "./LevelLoader.h"
+#include "SDL2/SDL_mixer.h"
 
 int Game::windowHeight;
 int Game::windowWidth;
@@ -56,6 +58,10 @@ void Game::Initialize() {
   if (TTF_Init() != 0) {
     Logger::Err("Error initializing SDL TTF.");
     return;
+  }
+
+  if (Mix_OpenAudio(44025, MIX_DEFAULT_FORMAT, 2, 2048)) {
+    Logger::Err("Error initializing Mixer.");
   }
 
   SDL_DisplayMode displayMode;
@@ -102,7 +108,7 @@ void Game::Setup() {
   registry->AddSystem<RenderHealthBarSystem>();
   registry->AddSystem<RenderGUISystem>();
   registry->AddSystem<ScriptSystem>();
-
+  registry->AddSystem<AudioSystem>();
   // Load the first level
   LevelLoader loader;
   lua.open_libraries(sol::lib::base, sol::lib::math, sol::lib::os);
@@ -143,6 +149,7 @@ void Game::Update() {
   registry->GetSystem<CameraMovementSystem>().Update(camera);
   registry->GetSystem<ProjectileLifecycleSystem>().Update();
   registry->GetSystem<ScriptSystem>().Update();
+  registry->GetSystem<AudioSystem>().Update();
 }
 
 void Game::Run() {
@@ -202,6 +209,7 @@ void Game::Render() {
 void Game::Destroy() {
   ImGuiSDL::Deinitialize();
   ImGui::DestroyContext();
+  Mix_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();

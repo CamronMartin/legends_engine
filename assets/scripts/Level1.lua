@@ -98,6 +98,7 @@ Level = {
 		{ type = "texture", id = "radar-texture", file = "./assets/images/radar-spritesheet.png" },
 		{ type = "font", id = "pico8-font-5", file = "./assets/fonts/pico8.ttf", font_size = 5 },
 		{ type = "font", id = "pico8-font-10", file = "./assets/fonts/pico8.ttf", font_size = 10 },
+		{ type = "sound", id = "helicopter-wav", file = "assets/sounds/helicopter.wav" },
 	},
 
 	-- table to define the map config variables
@@ -160,6 +161,10 @@ Level = {
 				},
 				camera_follow = {
 					follow = true,
+				},
+				audio = {
+					sound = "assets/sounds/helicopter.wav",
+					loop = 0,
 				},
 			},
 		},
@@ -2759,117 +2764,117 @@ Level = {
 				},
 			},
 		},
-		{
-			-- SU-27 fighter jet
-			group = "enemies",
-			components = {
-				transform = {
-					position = { x = 317, y = 985 },
-					scale = { x = 1.0, y = 1.0 },
-					rotation = 0.0, -- degrees
-				},
-				rigidbody = {
-					velocity = { x = 0.0, y = -50.0 },
-				},
-				sprite = {
-					texture_asset_id = "su27-texture",
-					width = 32,
-					height = 32,
-					z_index = 5,
-				},
-				animation = {
-					num_frames = 2,
-					speed_rate = 10, -- fps
-				},
-				boxcollider = {
-					width = 32,
-					height = 32,
-				},
-				health = {
-					health_percentage = 100,
-				},
-				projectile_emitter = {
-					projectile_velocity = { x = 0, y = -100 },
-					projectile_duration = 5, -- seconds
-					repeat_frequency = 1, -- seconds
-					hit_percentage_damage = 10,
-					friendly = false,
-				},
-				on_update_script = {
-					[0] = function(entity, delta_time, ellapsed_time)
-						--print("Executing the SU-27 fighter jet Lua script!")
-
-						-- this function makes the fighter jet move up and down the map shooting projectiles
-						local current_position_x, current_position_y = get_position(entity)
-						local current_velocity_x, current_velocity_y = get_velocity(entity)
-
-						-- if it reaches the top or the bottom of the map
-						if current_position_y < 10 or current_position_y > map_height - 32 then
-							set_velocity(entity, 0, current_velocity_y * -1) -- flip the entity y-velocity
-						else
-							set_velocity(entity, 0, current_velocity_y) -- do not flip y-velocity
-						end
-
-						-- set the transform rotation to match going up or down
-						if current_velocity_y < 0 then
-							set_rotation(entity, 0) -- point up
-							set_projectile_velocity(entity, 0, -200) -- shoot projectiles up
-						else
-							set_rotation(entity, 180) -- point down
-							set_projectile_velocity(entity, 0, 200) -- shoot projectiles down
-						end
-					end,
-				},
-			},
-		},
-		{
-			-- F-22 fighter jet
-			group = "enemies",
-			components = {
-				transform = {
-					position = { x = 10, y = 10 },
-					scale = { x = 1.0, y = 1.0 },
-					rotation = 90.0, -- degrees
-				},
-				rigidbody = {
-					velocity = { x = 0.0, y = 0.0 },
-				},
-				sprite = {
-					texture_asset_id = "f22-texture",
-					width = 32,
-					height = 32,
-					z_index = 5,
-				},
-				animation = {
-					num_frames = 2,
-					speed_rate = 10, -- fps
-				},
-				boxcollider = {
-					width = 32,
-					height = 32,
-				},
-				health = {
-					health_percentage = 100,
-				},
-				projectile_emitter = {
-					projectile_velocity = { x = 200, y = 0 },
-					projectile_duration = 1, -- secondsm
-					repeat_frequency = 1, -- seconds
-					hit_percentage_damage = 10,
-					friendly = false,
-				},
-				on_update_script = {
-					[0] = function(entity, delta_time, ellapsed_time)
-						--print("Executing F-22 Lua script!")
-
-						-- change the position of the the airplane to follow a sine wave movement
-						local new_x = ellapsed_time * 0.09
-						local new_y = 200 + (math.sin(ellapsed_time * 0.001) * 50)
-						set_position(entity, new_x, new_y) -- set the new position
-					end,
-				},
-			},
-		},
+		-- {
+		-- 	-- SU-27 fighter jet
+		-- 	group = "enemies",
+		-- 	components = {
+		-- 		transform = {
+		-- 			position = { x = 317, y = 985 },
+		-- 			scale = { x = 1.0, y = 1.0 },
+		-- 			rotation = 0.0, -- degrees
+		-- 		},
+		-- 		rigidbody = {
+		-- 			velocity = { x = 0.0, y = -50.0 },
+		-- 		},
+		-- 		sprite = {
+		-- 			texture_asset_id = "su27-texture",
+		-- 			width = 32,
+		-- 			height = 32,
+		-- 			z_index = 5,
+		-- 		},
+		-- 		animation = {
+		-- 			num_frames = 2,
+		-- 			speed_rate = 10, -- fps
+		-- 		},
+		-- 		boxcollider = {
+		-- 			width = 32,
+		-- 			height = 32,
+		-- 		},
+		-- 		health = {
+		-- 			health_percentage = 100,
+		-- 		},
+		-- 		projectile_emitter = {
+		-- 			projectile_velocity = { x = 0, y = -100 },
+		-- 			projectile_duration = 5, -- seconds
+		-- 			repeat_frequency = 1, -- seconds
+		-- 			hit_percentage_damage = 10,
+		-- 			friendly = false,
+		-- 		},
+		-- 		on_update_script = {
+		-- 			[0] = function(entity, delta_time, ellapsed_time)
+		-- 				--print("Executing the SU-27 fighter jet Lua script!")
+		--
+		-- 				-- this function makes the fighter jet move up and down the map shooting projectiles
+		-- 				local current_position_x, current_position_y = get_position(entity)
+		-- 				local current_velocity_x, current_velocity_y = get_velocity(entity)
+		--
+		-- 				-- if it reaches the top or the bottom of the map
+		-- 				if current_position_y < 10 or current_position_y > map_height - 32 then
+		-- 					set_velocity(entity, 0, current_velocity_y * -1) -- flip the entity y-velocity
+		-- 				else
+		-- 					set_velocity(entity, 0, current_velocity_y) -- do not flip y-velocity
+		-- 				end
+		--
+		-- 				-- set the transform rotation to match going up or down
+		-- 				if current_velocity_y < 0 then
+		-- 					set_rotation(entity, 0) -- point up
+		-- 					set_projectile_velocity(entity, 0, -200) -- shoot projectiles up
+		-- 				else
+		-- 					set_rotation(entity, 180) -- point down
+		-- 					set_projectile_velocity(entity, 0, 200) -- shoot projectiles down
+		-- 				end
+		-- 			end,
+		-- 		},
+		-- 	},
+		-- },
+		-- {
+		-- 	-- F-22 fighter jet
+		-- 	group = "enemies",
+		-- 	components = {
+		-- 		transform = {
+		-- 			position = { x = 10, y = 10 },
+		-- 			scale = { x = 1.0, y = 1.0 },
+		-- 			rotation = 90.0, -- degrees
+		-- 		},
+		-- 		rigidbody = {
+		-- 			velocity = { x = 0.0, y = 0.0 },
+		-- 		},
+		-- 		sprite = {
+		-- 			texture_asset_id = "f22-texture",
+		-- 			width = 32,
+		-- 			height = 32,
+		-- 			z_index = 5,
+		-- 		},
+		-- 		animation = {
+		-- 			num_frames = 2,
+		-- 			speed_rate = 10, -- fps
+		-- 		},
+		-- 		boxcollider = {
+		-- 			width = 32,
+		-- 			height = 32,
+		-- 		},
+		-- 		health = {
+		-- 			health_percentage = 100,
+		-- 		},
+		-- 		projectile_emitter = {
+		-- 			projectile_velocity = { x = 200, y = 0 },
+		-- 			projectile_duration = 1, -- secondsm
+		-- 			repeat_frequency = 1, -- seconds
+		-- 			hit_percentage_damage = 10,
+		-- 			friendly = false,
+		-- 		},
+		-- 		on_update_script = {
+		-- 			[0] = function(entity, delta_time, ellapsed_time)
+		-- 				--print("Executing F-22 Lua script!")
+		--
+		-- 				-- change the position of the the airplane to follow a sine wave movement
+		-- 				local new_x = ellapsed_time * 0.09
+		-- 				local new_y = 200 + (math.sin(ellapsed_time * 0.001) * 50)
+		-- 				set_position(entity, new_x, new_y) -- set the new position
+		-- 			end,
+		-- 		},
+		-- 	},
+		-- },
 	},
 }
 

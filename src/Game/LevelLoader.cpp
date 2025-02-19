@@ -1,11 +1,14 @@
 
 #include "./LevelLoader.h"
 
+#include <SDL2/SDL_mixer.h>
+
 #include <fstream>
 #include <sol/sol.hpp>
 #include <string>
 
 #include "../Components/AnimationComponent.h"
+#include "../Components/AudioComponent.h"
 #include "../Components/BoxColliderComponent.h"
 #include "../Components/CameraFollowComponent.h"
 #include "../Components/HealthComponent.h"
@@ -193,6 +196,29 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
       if (script != sol::nullopt) {
         sol::function func = entity["components"]["on_update_script"][0];
         newEntity.AddComponent<ScriptComponent>(func);
+      }
+
+      // Audio
+
+      // Audio
+      sol::optional<sol::table> audio = entity["components"]["audio"];
+      if (audio != sol::nullopt) {
+        sol::optional<std::string> soundPath = entity["components"]["audio"]["sound"];
+        sol::optional<int> loop = entity["components"]["audio"]["loop"];
+
+        if (soundPath && !soundPath->empty()) {
+          Logger::Log("Loading sound file: " + soundPath.value());
+          Mix_Chunk* sound = Mix_LoadWAV(soundPath->c_str());
+
+          if (!sound) {
+            Logger::Err("Failed to load sound: " + soundPath.value() + " - " + Mix_GetError());
+          } else {
+            Logger::Log("Successfully loaded sound: " + soundPath.value());
+            newEntity.AddComponent<AudioComponent>(sound, loop.value_or(0));
+          }
+        } else {
+          Logger::Err("Error: Missing or invalid 'sound' path in audio component.");
+        }
       }
     }
     i++;
