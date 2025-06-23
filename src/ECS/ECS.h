@@ -263,15 +263,13 @@ void Registry::RemoveComponent(Entity entity) {
   const auto componentId = Component<TComponent>::GetId();
   const auto entityId = entity.GetId();
 
-  std::shared_ptr<Pool<TComponent>> componentPool =
-      std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
+  std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
 
   componentPool->Remove(entityId);
 
   entityComponentSignatures[entityId].set(componentId, false);
 
-  Logger::Log("Component id = " + std::to_string(componentId) + " was removed from entity id " +
-              std::to_string(entityId));
+  Logger::Log("Component id = " + std::to_string(componentId) + " was removed from entity id " + std::to_string(entityId));
 }
 
 template <typename TSystem, typename... TArgs>
@@ -325,8 +323,7 @@ void Registry::AddComponent(Entity entity, TArgs &&...args) {
     componentPools[componentId] = newComponentPool;
   }
 
-  std::shared_ptr<Pool<TComponent>> componentPool =
-      std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
+  std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
 
   if (entityId >= componentPool->GetSize()) {
     componentPool->Resize(numEntities);

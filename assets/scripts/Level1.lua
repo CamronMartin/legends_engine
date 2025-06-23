@@ -1,12 +1,12 @@
 -- Load a different tilemap image depending on the current time
 local current_system_hour = os.date("*t").hour
 
-local map_texture_asset_id
+local map_texture_asset_id = "tilemap-desert"
 
 if current_system_hour >= 9 and current_system_hour < 18 then
-	map_texture_asset_id = "tilemap-texture-day"
+	--map_texture_asset_id = "tilemap-texture-day"
 else
-	map_texture_asset_id = "tilemap-texture-night"
+	--map_texture_asset_id = "tilemap-texture-night"
 end
 
 -- Define a table with the start values of the first level
@@ -104,8 +104,8 @@ Level = {
 
 	-- table to define the map config variables
 	tilemap = {
-		map_file = "./assets/tilemaps/jungle.map",
-		--map_file = "./assets/tilemaps/desert.map",
+		--map_file = "./assets/tilemaps/jungle.map",
+		map_file = "./assets/tilemaps/desert.map",
 		texture_asset_id = map_texture_asset_id,
 		--texture_asset_id = "tilemap-desert",
 		num_rows = 20,

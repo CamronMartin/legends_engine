@@ -31,6 +31,7 @@
 #include "../Systems/RenderTextSystem.h"
 #include "../Systems/ScriptSystem.h"
 #include "./LevelLoader.h"
+#include "SDL2/SDL_keycode.h"
 #include "SDL2/SDL_mixer.h"
 
 int Game::windowHeight;
@@ -82,7 +83,6 @@ void Game::Initialize() {
   // Initialize the imgui context
   ImGui::CreateContext();
   ImGuiSDL::Initialize(renderer, windowWidth, windowHeight);
-
   // Initialize camera view with the entire screen area
   camera.x = 0;
   camera.y = 0;
@@ -109,8 +109,8 @@ void Game::Setup() {
   registry->AddSystem<RenderGUISystem>();
   registry->AddSystem<ScriptSystem>();
   registry->AddSystem<AudioSystem>();
-
-  // Create the bindings between C++ and Lua
+  // registry->AddSystem<TilemapSystem>();
+  //  Create the bindings between C++ and Lua
   registry->GetSystem<ScriptSystem>().CreateLuaBindings(lua);
 
   // Load the first level
@@ -190,6 +190,9 @@ void Game::ProcessInput() {
         if (sdlEvent.key.keysym.sym == SDLK_F1) {
           isDebug = !isDebug;
         }
+        if (sdlEvent.key.keysym.sym == SDLK_F2) {
+          isTilemap = !isTilemap;
+        }
         eventBus->EmitEvent<KeyPressedEvent>(sdlEvent.key.keysym.sym);
         break;
     }
@@ -206,6 +209,9 @@ void Game::Render() {
     registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
     registry->GetSystem<RenderGUISystem>().Update(registry, camera);
   }
+  // if (isTilemap) {
+  //   registry->GetSystem<TilemapSystem>().Update(registry, camera);
+  // }
   // THIS IS THE BUFFER SWAP
   SDL_RenderPresent(renderer);
 }
