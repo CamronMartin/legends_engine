@@ -29,6 +29,7 @@
 #include "../Systems/RenderHealthBarSystem.h"
 #include "../Systems/RenderSystem.h"
 #include "../Systems/RenderTextSystem.h"
+#include "../Systems/RenderTilemapSystem.h"
 #include "../Systems/ScriptSystem.h"
 #include "./LevelLoader.h"
 #include "SDL2/SDL_keycode.h"
@@ -83,6 +84,7 @@ void Game::Initialize() {
   // Initialize the imgui context
   ImGui::CreateContext();
   ImGuiSDL::Initialize(renderer, windowWidth, windowHeight);
+
   // Initialize camera view with the entire screen area
   camera.x = 0;
   camera.y = 0;
@@ -107,9 +109,10 @@ void Game::Setup() {
   registry->AddSystem<RenderTextSystem>();
   registry->AddSystem<RenderHealthBarSystem>();
   registry->AddSystem<RenderGUISystem>();
+  registry->AddSystem<RenderTilemapSystem>();
   registry->AddSystem<ScriptSystem>();
   registry->AddSystem<AudioSystem>();
-  // registry->AddSystem<TilemapSystem>();
+
   //  Create the bindings between C++ and Lua
   registry->GetSystem<ScriptSystem>().CreateLuaBindings(lua);
 
@@ -130,6 +133,10 @@ void Game::Update() {
   // The difference in ticks since the last frame, converted to seconds
   double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0;
 
+  if (isTilemap) {
+    deltaTime = 0.0;
+  }
+
   // Store the previous frame time
   millisecsPreviousFrame = SDL_GetTicks();
 
@@ -141,6 +148,7 @@ void Game::Update() {
   registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
   registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(eventBus);
   registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
+
   // Update the registry to process the entities that are waiting to be
   // created/deleted
   registry->Update();
@@ -205,14 +213,17 @@ void Game::Render() {
   registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
   registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
   registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
+
   if (isDebug) {
     registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
     registry->GetSystem<RenderGUISystem>().Update(registry, camera);
   }
-  // if (isTilemap) {
-  //   registry->GetSystem<TilemapSystem>().Update(registry, camera);
-  // }
-  // THIS IS THE BUFFER SWAP
+
+  if (isTilemap) {
+    registry->GetSystem<RenderTilemapSystem>().Update(registry, renderer, window, camera);
+  }
+
+  //  THIS IS THE BUFFER SWAP
   SDL_RenderPresent(renderer);
 }
 

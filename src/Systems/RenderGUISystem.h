@@ -1,10 +1,10 @@
 #ifndef RENDERGUISYSTEM_H
 #define RENDERGUISYSTEM_H
 
+#include <SDL2/SDL_render.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_sdl.h>
 
-#include <fstream>
 #include <memory>
 
 #include "../Components/BoxColliderComponent.h"
@@ -14,68 +14,11 @@
 #include "../Components/SpriteComponent.h"
 #include "../Components/TransformComponent.h"
 #include "../ECS/ECS.h"
-#include "SDL2/SDL_render.h"
 
-struct Tile {
-  int id;
-  SDL_Texture* texture;
-  std::string name;
-};
-
-struct Tilemap {
-  int num_cols;
-  int num_rows;
-  std::vector<int> tiles;  // 1D vector storing tile IDs per cell
-};
 class RenderGUISystem : public System {
  public:
   RenderGUISystem() = default;
 
-  SDL_Texture* LoadTexture(const std::string& file, SDL_Renderer* renderer) {
-    SDL_Surface* surface = SDL_LoadBMP(file.c_str());
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
-    return texture;
-  }
-
-  void RenderTilemapEditor(Tilemap& tilemap, const ImVec2& tile_size, const ImVec2& grid_pos) {
-    ImGui::Begin("Tilemap Editor");
-
-    // --- Tile Palette ---
-    ImGui::Text("Tile Palette:");
-    for (auto& [id, tile] : tileset) {
-      ImGui::PushID(id);
-      if (ImGui::ImageButton((void*)tile.texture, tile_size)) {
-        selectedTileId = id;
-      }
-      ImGui::SameLine();
-      ImGui::Text("%s", tile.name.c_str());
-      ImGui::PopID();
-    }
-
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Text("Click to paint on tilemap:");
-
-    // --- Tilemap Grid ---
-    for (int row = 0; row < tilemap.num_rows; ++row) {
-      for (int col = 0; col < tilemap.num_cols; ++col) {
-        int index = row * tilemap.num_cols + col;
-        ImVec2 tile_pos = ImVec2(grid_pos.x + col * tile_size.x, grid_pos.y + row * tile_size.y);
-        ImGui::SetCursorScreenPos(tile_pos);
-
-        int tileId = tilemap.tiles[index];
-        SDL_Texture* tex = tileset[tileId].texture;
-        ImGui::Image((void*)tex, tile_size);
-
-        if (ImGui::IsItemHovered() && ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
-          tilemap.tiles[index] = selectedTileId;
-        }
-      }
-    }
-
-    ImGui::End();
-  }
   void Update(std::unique_ptr<Registry>& registry, const SDL_Rect& camera) {
     // Draw all the imgui objects in the screen
     ImGui::NewFrame();
@@ -166,10 +109,6 @@ class RenderGUISystem : public System {
     ImGui::Render();
     ImGuiSDL::Render(ImGui::GetDrawData());
   }
-
- private:
-  std::unordered_map<int, Tile> tileset;
-  int selectedTileId;
 };
 
 #endif

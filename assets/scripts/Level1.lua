@@ -1,12 +1,12 @@
 -- Load a different tilemap image depending on the current time
 local current_system_hour = os.date("*t").hour
 
-local map_texture_asset_id = "tilemap-desert"
-
+local ellapsed_time_tracker = {}
+local map_texture_asset_id
 if current_system_hour >= 9 and current_system_hour < 18 then
-	--map_texture_asset_id = "tilemap-texture-day"
+	map_texture_asset_id = "tilemap-texture-day"
 else
-	--map_texture_asset_id = "tilemap-texture-night"
+	map_texture_asset_id = "tilemap-texture-night"
 end
 
 -- Define a table with the start values of the first level
@@ -104,10 +104,8 @@ Level = {
 
 	-- table to define the map config variables
 	tilemap = {
-		--map_file = "./assets/tilemaps/jungle.map",
-		map_file = "./assets/tilemaps/desert.map",
+		map_file = "./assets/tilemaps/jungle.map",
 		texture_asset_id = map_texture_asset_id,
-		--texture_asset_id = "tilemap-desert",
 		num_rows = 20,
 		num_cols = 25,
 		tile_size = 32,
@@ -1672,6 +1670,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 115, y = 633 },
@@ -1688,6 +1687,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 117, y = 650 },
@@ -1704,6 +1704,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 318, y = 490 },
@@ -1720,6 +1721,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 668, y = 526 },
@@ -1736,6 +1738,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 1018, y = 738 },
@@ -1752,6 +1755,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 1034, y = 738 },
@@ -1768,6 +1772,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 1028, y = 745 },
@@ -1784,6 +1789,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 1390, y = 440 },
@@ -1800,6 +1806,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 1400, y = 445 },
@@ -1816,6 +1823,7 @@ Level = {
 		},
 		{
 			-- Vegetation
+			group = "vegetation",
 			components = {
 				transform = {
 					position = { x = 1365, y = 290 },
@@ -1832,6 +1840,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 669, y = 549 },
@@ -1848,6 +1857,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 685, y = 549 },
@@ -1864,6 +1874,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 315, y = 505 },
@@ -1880,6 +1891,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 330, y = 507 },
@@ -1896,6 +1908,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 438, y = 390 },
@@ -1912,6 +1925,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 449, y = 408 },
@@ -1928,6 +1942,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 431, y = 416 },
@@ -1944,6 +1959,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 940, y = 695 },
@@ -1960,6 +1976,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 955, y = 705 },
@@ -1976,6 +1993,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1085, y = 507 },
@@ -1992,6 +2010,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1075, y = 527 },
@@ -2008,6 +2027,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1075, y = 547 },
@@ -2024,6 +2044,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1085, y = 567 },
@@ -2040,6 +2061,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1355, y = 449 },
@@ -2056,6 +2078,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1430, y = 446 },
@@ -2072,6 +2095,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1435, y = 195 },
@@ -2088,6 +2112,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1425, y = 215 },
@@ -2104,6 +2129,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1425, y = 235 },
@@ -2120,6 +2146,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1425, y = 255 },
@@ -2136,6 +2163,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1435, y = 275 },
@@ -2152,6 +2180,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1360, y = 310 },
@@ -2168,6 +2197,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1380, y = 312 },
@@ -2184,6 +2214,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1330, y = 212 },
@@ -2200,6 +2231,7 @@ Level = {
 		},
 		{
 			-- Obstacles
+			group = "obstacles",
 			components = {
 				transform = {
 					position = { x = 1360, y = 232 },
@@ -2869,10 +2901,11 @@ Level = {
 				on_update_script = {
 					[0] = function(entity, delta_time, ellapsed_time)
 						--print("Executing F-22 Lua script!")
-
 						-- change the position of the the airplane to follow a sine wave movement
 						local new_x = ellapsed_time * 0.09
 						local new_y = 200 + (math.sin(ellapsed_time * 0.001) * 50)
+						new_x = new_x + delta_time
+						new_y = new_y + delta_time
 						set_position(entity, new_x, new_y) -- set the new position
 					end,
 				},

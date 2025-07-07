@@ -19,7 +19,10 @@
 #include "../Components/SpriteComponent.h"
 #include "../Components/TextLabelComponent.h"
 #include "../Components/TransformComponent.h"
+#include "../Systems/RenderTilemapSystem.h"
 #include "./Game.h"
+
+Tilemap tilemap;
 
 LevelLoader::LevelLoader() { Logger::Log("LevelLoader constructor called!"); }
 
@@ -70,6 +73,8 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
   std::string mapTextureAssetId = map["texture_asset_id"];
   int mapNumRows = map["num_rows"];
   int mapNumCols = map["num_cols"];
+  tilemap.num_rows = mapNumRows;
+  tilemap.num_cols = mapNumCols;
   int tileSize = map["tile_size"];
   double mapScale = map["scale"];
   std::fstream mapFile;
@@ -84,6 +89,14 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
       mapFile.ignore();
 
       Entity tile = registry->CreateEntity();
+      Tile tileInfo;
+      tileInfo.id = tile.GetId();  // optional
+      tileInfo.srcRectX = srcRectX;
+      tileInfo.srcRectY = srcRectY;
+      tileInfo.texture = assetStore->GetTexture(mapTextureAssetId);
+      tileInfo.name = "tile_" + std::to_string(x) + "_" + std::to_string(y);
+      tilemap.tiles.push_back(tileInfo);
+      tile.Group("tiles");
       tile.AddComponent<TransformComponent>(glm::vec2(x * (mapScale * tileSize), y * (mapScale * tileSize)), glm::vec2(mapScale, mapScale), 0.0);
       tile.AddComponent<SpriteComponent>(mapTextureAssetId, tileSize, tileSize, 0, false, srcRectX, srcRectY);
     }
@@ -197,8 +210,6 @@ void LevelLoader::LoadLevel(sol::state& lua, const std::unique_ptr<Registry>& re
         sol::function func = entity["components"]["on_update_script"][0];
         newEntity.AddComponent<ScriptComponent>(func);
       }
-
-      // Audio
 
       // Audio
       sol::optional<sol::table> audio = entity["components"]["audio"];
